@@ -1,6 +1,6 @@
 plugins {
 	id 'maven-publish'
-	id 'fabric-loom' version "0.4-SNAPSHOT"
+	id 'fabric-loom' version "0.6-SNAPSHOT"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -100,5 +100,17 @@ publishing {
 	repositories {
 		// uncomment to publish to the local maven
 		// mavenLocal()
+	}
+}
+
+loom {
+	runs {
+		oldClient {
+			client()
+			ideConfigGenerated project.rootProject == project
+			name = "Old Client"
+			source sourceSets.main
+			programArgs "--userProperties", "{}"
+		}
 	}
 }

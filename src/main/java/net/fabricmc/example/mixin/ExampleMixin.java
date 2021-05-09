@@ -1,15 +1,18 @@
 package net.fabricmc.example.mixin;
 
-import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.MinecraftClient;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(TitleScreen.class)
+@Mixin(InGameHud.class)
 public class ExampleMixin {
-	@Inject(at = @At("HEAD"), method = "init()V")
-	private void init(CallbackInfo info) {
-		System.out.println("This line is printed by an example mod mixin!");
+	@Inject(at = @At(value = "INVOKE", target = "Ljava/lang/Runtime;maxMemory()J"), method = "render(FZII)V")
+	private void render(float tickDelta, boolean screenOpen, int mouseX, int mouseY, CallbackInfo info) {
+		TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+		textRenderer.drawWithShadow("wow, crabs bad!", 2, 52, 0xFFFFFF);
 	}
 }
